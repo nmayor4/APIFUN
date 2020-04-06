@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>API Practice</title>
+	<style type="text/css">
+        html,input {
+        	font-size:20px; 
+        	font-family: Arial, Helvetica, Times; 
+        	text-align: center;}
+        body {
+	       	background-image: url("189427.jpg");
+			height: 100%;
+			background-repeat: no-repeat;
+		}
+		h1 {
+			font-size: 55px; 
+        	font-family: Arial, Helvetica, Times; 
+        	text-align: center;
+        	color: #F0EDED;
+		}
+        p {font-size: 25px;}
+        .button {background-color: #050835; border: solid 1px; color: #9AB3E5; padding: 10px 20px; text-align: center; font-size: 25px; cursor: pointer; text-decoration: none; font-family: Arial, Helvetica, Times; border-color: #9AB3E5}
+		.button:hover {background-color: #ABBEC2; color: #050835; border: solid 1px; border-color: #050835}
+    </style>
+
+	<script>
+		function loadData() {	// copied this function from sample code and trying to tweak it
+			
+			request = new XMLHttpRequest();
+
+			position = document.forms[1].iss_position.value;
+			request.open("GET", "http://api.open-notify.org/iss-now.json"+position, true);
+			url = "http://api.open-notify.org/iss-now.json="+position;
+			document.getElementById("loc").innerHTML = url;
+
+			request.onreadystatechange = function() {
+
+				if (request.readyState == 4 && request.status == 200) {
+					theData = request.responseText;
+					document.getElementById("loc").innerHTML += "<br>The response is: " + theData;	
+				}
+				else if (request.readyState == 4 && request.status != 200) 
+				{
+				   document.getElementById("loc").innerHTML += "<br>Request failed!";
+				}
+			}
+			request.send();
+		}
+	</script>
+
+</head>
+
+<body>
+	<br><br><br>
+	<h1>Where is the International Space Station?</h1>
+	<br>
+	<button class="button" onclick="loadData()">Click to find out</button>
+	<br><br>
+	<div id="loc" style="color: #F0EDED"></div>
+</body>
+
+</html>
