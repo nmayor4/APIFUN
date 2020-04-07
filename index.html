@@ -5,8 +5,8 @@
 <title>API Practice</title>
 	<style type="text/css">
         html,input {
-        	font-size:20px; 
-        	font-family: Arial, Helvetica, Times; 
+        	font-size:20px;
+        	font-family: Arial, Helvetica, Times;
         	text-align: center;}
         body {
 	       	background-image: url("189427.jpg");
@@ -14,51 +14,78 @@
 			background-repeat: no-repeat;
 		}
 		h1 {
-			font-size: 50px; 
-        	font-family: Arial, Helvetica, Times; 
+			font-size: 40px;
+        	font-family: Arial, Helvetica, Times;
         	text-align: center;
         	color: #F0EDED;
 		}
-        p {font-size: 25px;}
-        div {color: #EDF725; font-size: 35px;}
+		div.shadow {
+			width: 300px;
+			margin: auto;
+			background-color: black;
+			opacity: 0.8;
+			display: none;
+		}
+		div.shadow p {
+			font-size: 22px;
+			color: yellow;
+			text-align: center;
+			padding: 20px 0;
+		}
         .button {background-color: #050835; border: solid 1px; color: #9AB3E5; padding: 10px 20px; text-align: center; font-size: 25px; cursor: pointer; text-decoration: none; font-family: Arial, Helvetica, Times; border-color: #9AB3E5}
-		.button:hover {background-color: #ABBEC2; color: #050835; border: solid 1px; border-color: #050835;}
+		.button:hover {background-color: #ABBEC2; color: #050835; border: solid 1px; border-color: #050835}
     </style>
 
 	<script>
 		function loadData() {
-			
-			let request = new XMLHttpRequest();
+
+			request = new XMLHttpRequest();
 
 			request.open("GET", "http://api.open-notify.org/iss-now.json", true);
 
 			request.onreadystatechange = function() {
 
 				if (request.readyState == 4 && request.status == 200) {
-					let data = request.responseText;
-					data = JSON.parse(data);
-					let lat = data.iss_position.latitude;
-					let long = data.iss_position.longitude;
-					document.getElementById("loc").innerHTML = `Coordinates are: (${lat}, ${long})`;	
+					loc = JSON.parse(request.responseText).iss_position;
+					img_url = loadMap(loc.latitude, loc.longitude);
+					console.log(img_url);
+					document.getElementById("map").src = img_url;
 				}
-				else if (request.readyState == 4 && request.status != 200) 
+				else if (request.readyState == 4 && request.status != 200)
 				{
-				   document.getElementById("loc").innerHTML = "<br>Request failed!";
+				   document.getElementById("loc").style.display = "block";
+				   document.getElementById("refresh").style.display = "none";
 				}
 			}
 			request.send();
+		}
+
+		function loadMap(lat,long) {
+			baseURL = "http://www.mapquestapi.com/staticmap/v5/map";
+			key="zdSYpeMtTCr5MUeqAd8rGMXjXQB8Eu5K";
+			type="dark";
+			size="1500,900";
+			locations=`${lat},${long}`; //|marker-purple-lg`;
+			icon="https://cdn0.iconfinder.com/data/icons/space-142/64/space-satellite-iss-station-2-128.png";
+			zoom=3;
+			banner=`Current+Location:+(${lat},${long})|lg`;
+			return `${baseURL}?key=${key}&type=${type}&size=${size}&zoom=${zoom}&locations=${locations}|${icon}&banner=${banner}`
+
+
 		}
 	</script>
 
 </head>
 
-<body>
-	<br><br><br>
-	<h1>Where is the International Space Station right now?</h1>
+<body onload="loadData()">
 	<br>
-	<button class="button" onclick="loadData()">Click to find out</button>
-	<br><br><br><br>
-	<div id="loc"></div>
+	<h1>Where is the International Space Station right now?</h1>
+	<div id="loc" class="shadow">
+		<p>Failed to load location!</p>
+	</div>
+	<img id="map" src="" style="width: 1000px"></div>
+	<br><br>
+	<button id="refresh" class="button" onclick="loadData()">Refresh Location</button>
 </body>
 
 </html>
