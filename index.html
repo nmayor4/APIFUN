@@ -19,6 +19,12 @@
         	text-align: center;
         	color: #F0EDED;
 		}
+		p {
+			font-size: 18px;
+        	font-family: Arial, Helvetica, Times;
+        	text-align: center;
+        	color: #050835;
+		}
 		div.shadow {
 			width: 300px;
 			margin: auto;
@@ -32,8 +38,37 @@
 			text-align: center;
 			padding: 20px 0;
 		}
-        .button {background-color: #050835; border: solid 1px; color: #9AB3E5; padding: 10px 20px; text-align: center; font-size: 25px; cursor: pointer; text-decoration: none; font-family: Arial, Helvetica, Times; border-color: #9AB3E5}
-		.button:hover {background-color: #ABBEC2; color: #050835; border: solid 1px; border-color: #050835}
+        .button {
+        	background-color: #050835; 
+        	border: solid 1px; 
+        	color: #9AB3E5; 
+        	padding: 10px 20px; 
+        	text-align: center; 
+        	font-size: 25px; 
+        	cursor: pointer; 
+        	text-decoration: none; 
+        	font-family: Arial, Helvetica, Times; 
+        	border-color: #9AB3E5
+        }
+		.button:hover {
+			background-color: #ABBEC2; 
+			color: #050835; 
+			border: solid 1px; 
+			border-color: #050835
+		}
+		.row {
+			display: flex;
+		}
+		.column {
+			flex: 50%; 
+			padding: 10px; 
+			border-style: solid; 
+			/*margin-left: 25%; 
+			margin-right: 25%; */
+			border-width: 1px; 
+			background-color: rgba(190, 189, 208, 0.8);
+			backface-visibility:
+		}
     </style>
 
 	<script>
@@ -86,6 +121,14 @@
 	<img id="map" src="" style="width: 1000px"></div>
 	<br><br>
 	<button id="refresh" class="button" onclick="loadData()">Refresh Location</button>
+	<br><br><br>
+	<div class="row">
+	  <div class="column">
+	    <p style="color: #BF130B"><strong>Note:</strong> This API serves content over an HTTP connection which is insecure. Since Chrome and other browsers block insecure connections, I had to manually allow Chrome to serve mixed content to display the API information.</p>
+
+		<p>I was searching through various APIs and found one that could give me the current location of the International Space Station. I love all things outer space-related so I decided to use data from there: http://open-notify.org/Open-Notify-API/ISS-Location-Now/. Once I was able to get the coordinates, I thought it would be even more interesting to include a visual element and display the lat/long location on a map. I found out that Mapquest would allow me to do this, so I signed up for a free developer account to get an API key. I used Mapquest’s Static Map API to render a map with a pin at given coordinates: https://developer.mapquest.com/documentation/static-map-api/v5/map/#basic-parameters. I broke this down into clear sections in my code so it’s obvious how the data I pulled from Open-Notify is being used to render a Mapquest map.</p>
+	  </div>
+	</div>
 </body>
 
 </html>
