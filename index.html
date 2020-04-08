@@ -5,8 +5,8 @@
 <title>API Practice</title>
 	<style type="text/css">
         html,input {
-        	font-size:20px;
-        	font-family: Arial, Helvetica, Times;
+        	font-size:20px; 
+        	font-family: Arial, Helvetica, Times; 
         	text-align: center;}
         body {
 	       	background-image: url("189427.jpg");
@@ -14,8 +14,8 @@
 			background-repeat: no-repeat;
 		}
 		h1 {
-			font-size: 40px;
-        	font-family: Arial, Helvetica, Times;
+			font-size: 50px; 
+        	font-family: Arial, Helvetica, Times; 
         	text-align: center;
         	color: #F0EDED;
 		}
@@ -25,19 +25,8 @@
         	text-align: center;
         	color: #050835;
 		}
-		div.shadow {
-			width: 300px;
-			margin: auto;
-			background-color: black;
-			opacity: 0.8;
-			display: none;
-		}
-		div.shadow p {
-			font-size: 22px;
-			color: yellow;
-			text-align: center;
-			padding: 20px 0;
-		}
+        div {color: #EDF725; font-size: 35px;}
+        img {width: 700px;}
         .button {
         	background-color: #050835; 
         	border: solid 1px; 
@@ -62,71 +51,59 @@
 		.column {
 			flex: 50%; 
 			padding: 10px; 
-			border-style: solid; 
-			/*margin-left: 25%; 
-			margin-right: 25%; */
+			border-style: solid;
 			border-width: 1px; 
 			background-color: rgba(190, 189, 208, 0.8);
 			backface-visibility:
-		}
     </style>
 
 	<script>
 		function loadData() {
-
-			request = new XMLHttpRequest();
+			
+			let request = new XMLHttpRequest();
 
 			request.open("GET", "http://api.open-notify.org/iss-now.json", true);
 
 			request.onreadystatechange = function() {
 
 				if (request.readyState == 4 && request.status == 200) {
-					loc = JSON.parse(request.responseText).iss_position;
-					img_url = loadMap(loc.latitude, loc.longitude);
-					console.log(img_url);
-					document.getElementById("map").src = img_url;
+					let data = request.responseText;
+					data = JSON.parse(data);
+					let lat = data.iss_position.latitude;
+					let lng = data.iss_position.longitude;
+					document.getElementById("loc").innerHTML = `Coordinates: (${lat}, ${lng})`;	
+					document.getElementById("map").src = loadMap(lat, lng);
 				}
-				else if (request.readyState == 4 && request.status != 200)
+				else if (request.readyState == 4 && request.status != 200) 
 				{
-				   document.getElementById("loc").style.display = "block";
-				   document.getElementById("refresh").style.display = "none";
+				   document.getElementById("loc").innerHTML = "<br>Request failed!";
 				}
 			}
 			request.send();
 		}
 
-		function loadMap(lat,long) {
-			baseURL = "http://www.mapquestapi.com/staticmap/v5/map";
-			key="zdSYpeMtTCr5MUeqAd8rGMXjXQB8Eu5K";
-			type="dark";
-			size="1500,900";
-			locations=`${lat},${long}`; //|marker-purple-lg`;
-			icon="https://cdn0.iconfinder.com/data/icons/space-142/64/space-satellite-iss-station-2-128.png";
-			zoom=3;
-			banner=`Current+Location:+(${lat},${long})|lg`;
-			return `${baseURL}?key=${key}&type=${type}&size=${size}&zoom=${zoom}&locations=${locations}|${icon}&banner=${banner}`
-
-
+		function loadMap(lat, lng) {
+			return `http://www.mapquestapi.com/staticmap/v5/map?key=zdSYpeMtTCr5MUeqAd8rGMXjXQB8Eu5K&type=sat&size=1300,800&locations=${lat},${lng}%7Cmarker-lg-1A25C7-F0EDED&scalebar=true&zoom=3`;
 		}
 	</script>
 
 </head>
 
-<body onload="loadData()">
-	<br>
-	<h1>Where is the International Space Station right now?</h1>
-	<div id="loc" class="shadow">
-		<p>Failed to load location!</p>
-	</div>
-	<img id="map" src="" style="width: 1000px"></div>
+<body>
 	<br><br>
-	<button id="refresh" class="button" onclick="loadData()">Refresh Location</button>
+	<h1>Where is the International Space Station right now?</h1>
+	<br>
+	<button class="button" onclick="loadData()">Click to find out</button>
 	<br><br><br>
+	<div id="loc"></div>
+	<br><br>
+	<img src="189427.jpg" alt="map" id="map">
+	<br><br>
 	<div class="row">
 	  <div class="column">
 	    <p style="color: #BF130B"><strong>Note:</strong> This API serves content over an HTTP connection which is insecure. Since Chrome and other browsers block insecure connections, I had to manually allow Chrome to serve mixed content to display the API information.</p>
 
-		<p>I was searching through various APIs and found one that could give me the current location of the International Space Station. I love all things outer space-related so I decided to use data from there: http://open-notify.org/Open-Notify-API/ISS-Location-Now/. Once I was able to get the coordinates, I thought it would be even more interesting to include a visual element and display the lat/long location on a map. I found out that Mapquest would allow me to do this, so I signed up for a free developer account to get an API key. I used Mapquest’s Static Map API to render a map with a pin at given coordinates: https://developer.mapquest.com/documentation/static-map-api/v5/map/#basic-parameters. I broke this down into clear sections in my code so it’s obvious how the data I pulled from Open-Notify is being used to render a Mapquest map. The map API is especially helpful in providing a visual representation of the ISS data collected. Having real-time access to this information could be helpful to scientists or researchers who are tracking the movements of the ISS. It could also be useful to people curious about outer space who want to know when the ISS is passing over them so they can search for it in the sky--there are applications that display live information about planets and other objects in the solar system, so this API could be helpful in that case as well.</p>
+		<p>I was searching through various APIs and found one that could give me the current location of the International Space Station. I love all things outer space-related so I decided to use data from there: http://open-notify.org/Open-Notify-API/ISS-Location-Now/. Once I was able to get the coordinates, I thought it would be even more interesting to include a visual element and display the lat/long location on a map. I found out that Mapquest would allow me to do this, so I signed up for a free developer account to get an API key. I used Mapquest’s Static Map API to render a map with a pin at given coordinates: https://developer.mapquest.com/documentation/static-map-api/v5/map/#basic-parameters. The map API is especially helpful in providing a visual representation of the ISS data collected. Having real-time access to this information could be helpful to scientists or researchers who are tracking the movements of the ISS. It could also be useful to people curious about outer space who want to know when the ISS is passing over them so they can search for it in the sky--there are applications that display live information about planets and other objects in the solar system, so this API could be helpful in that case as well.</p>
 	  </div>
 	</div>
 	<br>
